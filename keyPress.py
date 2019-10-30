@@ -10,17 +10,9 @@ S = 0x1F
 D = 0x20
 
 RETURN = 0x1C
-NP_2 = 0x50
-NP_4 = 0x4B
-NP_6 = 0x4D
-NP_8 = 0x48
 COMMA = 0x33
 GRAVE = 0x29
-DOWN = 0x45
-# UP = 0xC8
-L_ALT = 0x38
-KEY_5 = 0x06
-KEY_6 = 0x07
+
 # C struct redefinitions
 
 PUL = ctypes.POINTER(ctypes.c_ulong)
@@ -55,6 +47,7 @@ class Input(ctypes.Structure):
 
 # Actuals Functions
 
+
 def PressKey(hexKeyCode):
     extra = ctypes.c_ulong(0)
     ii_ = Input_I()
@@ -62,12 +55,14 @@ def PressKey(hexKeyCode):
     x = Input( ctypes.c_ulong(1), ii_ )
     ctypes.windll.user32.SendInput(1, ctypes.pointer(x), ctypes.sizeof(x))
 
+
 def ReleaseKey(hexKeyCode):
     extra = ctypes.c_ulong(0)
     ii_ = Input_I()
     ii_.ki = KeyBdInput( 0, hexKeyCode, 0x0008 | 0x0002, 0, ctypes.pointer(extra) )
     x = Input( ctypes.c_ulong(1), ii_ )
     ctypes.windll.user32.SendInput(1, ctypes.pointer(x), ctypes.sizeof(x))
+
 
 
 if __name__ == '__main__':
