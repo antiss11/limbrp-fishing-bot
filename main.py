@@ -1,19 +1,14 @@
 import win32gui
 import numpy as np
 from PIL import ImageGrab, Image, ImageDraw, ImageChops
-import cv2
 import time
-import keyPress
 import inventory
-import pyautogui
-
-
+import threading
 
 window_location = []
 window_size = []
 
-
-# fish1.show()
+INVENTORY_ACTION = False
 
 
 def get_fish_strip_bbox(window_size, window_location):
@@ -31,21 +26,6 @@ def get_fish_strip_bbox(window_size, window_location):
     return bbox
 
 
-def get_fish_val_bbox(window_size, window_location):
-    window_width = window_size[0]
-    window_height = window_size[1]
-    window_x = window_location[0]
-    window_y = window_location[1]
-    window_w_per = window_width / 100
-    window_h_per = window_height / 100
-    bbox_x1 = window_x + window_w_per * 16.5
-    bbox_y1 = window_y + window_h_per * 94.6
-    bbox_x2 = window_x + window_w_per * 18.8
-    bbox_y2 = window_y + window_h_per * 97
-    bbox = (bbox_x1, bbox_y1, bbox_x2, bbox_y2)
-    return bbox
-
-
 def callback(hwnd, extra):
     if 'FiveM' in win32gui.GetWindowText(hwnd):
         rect = win32gui.GetWindowRect(hwnd)
@@ -59,44 +39,41 @@ def callback(hwnd, extra):
         window_size.append(h)
 
 
-def main():
+def drop_fish():
+    time.sleep(2)
+    while True:
+        print(1)
+        global INVENTORY_ACTION
+        INVENTORY_ACTION = True
+        inventory.put_in_car()
+        INVENTORY_ACTION = False
+        time.sleep(4)
+
+
+def main_stripe():
     win32gui.EnumWindows(callback, None)
     fish_bbox = get_fish_strip_bbox(window_size, window_location)
-    fish_val_bbox = get_fish_val_bbox(window_size, window_location)
     green = np.array([60, 150, 60])
+
     while True:
-        # printscreen_pil_1 = ImageGrab.grab(bbox=fish_bbox)
-        # printscreen_pil_2 = ImageGrab.grab(bbox=fish_val_bbox)
-        # image1 = np.array(printscreen_pil_1)
-        # image2 = np.array(printscreen_pil_2)
-        # cv2.imshow("test1", image2)
-        # cv2.imshow("test", image1)
-        # color = image1[5, 17]
-        im = Image.open("images/3.png").crop(fish_val_bbox)
-        fish1 = Image.open(r"images/3.png").crop(fish_val_bbox)
-        # fish1.show()
-        # im.show()
-        diff = ImageChops.difference(fish1, im)
-        t_data = [1 for x in diff.getdata() if sum(x)]
-        print(sum(t_data))
-        break
-    #
-    #     if np.array_equal(color, green):
-    #         inventory.pressEnter()
-    #         time.sleep(1)
-    #         screenshot = pyautogui.screenshot()
-    #         screenshot.save(r'temp.png')
-    #         im = Image.open("temp.png").crop(fish_val_bbox)
-    #         im.show()
-            # time.sleep(2)
-            # inventory.pressComma()
-        # if cv2.waitKey(25) & 0xFF == ord('q'):
-        #     cv2.destroyAllWindows()
-        #     break
-    pass
+        if not INVENTORY_ACTION:
+            printscreen_pil_stripe = ImageGrab.grab(bbox=fish_bbox)
+            image_stripe = np.array(printscreen_pil_stripe)
+            color_stripe = image_stripe[5, 17]
+            if np.array_equal(color_stripe, green):
+
+                inventory.pressEnter()
+                time.sleep(1)
+                inventory.pressComma()
+
+
+
+def main():
+    threading.Thread(target=main_stripe).start()
+    threading.Thread(target=drop_fish).start()
+
 
 if __name__ == '__main__':
-    try:
-        main()
-    except Exception:
-        input()
+    main()
+    # time.sleep(2)
+    # inventory.put_in_car()

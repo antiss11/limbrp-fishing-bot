@@ -1,3 +1,6 @@
-import keyPress
+import datetime
+import time
 
-print(keyPress["W"])
+now = time.time()
+time.sleep(2)
+print(time.time() - now)
