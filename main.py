@@ -8,7 +8,39 @@ import threading
 window_location = []
 window_size = []
 
-INVENTORY_ACTION = False
+
+class Fisher:
+    def __init__(self):
+        self.inventory = inventory.Inventory()
+        self.can_put = False
+
+    def drop_fish(self):
+        while True:
+            if self.can_put:
+                self.inventory.put_in_car()
+                time.sleep(0.2)
+
+    def main_stripe(self):
+        win32gui.EnumWindows(callback, None)
+        fish_bbox = get_fish_strip_bbox(window_size, window_location)
+        green = np.array([60, 150, 60])
+        while True:
+            self.can_put = False
+            printscreen_pil_stripe = ImageGrab.grab(bbox=fish_bbox)
+            image_stripe = np.array(printscreen_pil_stripe)
+            color_stripe = image_stripe[5, 17]
+            if np.array_equal(color_stripe, green):
+                inventory.pressEnter()
+                time.sleep(1)
+                inventory.pressComma()
+                self.can_put = True
+                time.sleep(0.2)
+
+    def main(self):
+        # self.drop_fish()
+        threading.Thread(target=self.drop_fish).start()
+        threading.Thread(target=self.main_stripe).start()
+
 
 
 def get_fish_strip_bbox(window_size, window_location):
@@ -39,41 +71,9 @@ def callback(hwnd, extra):
         window_size.append(h)
 
 
-def drop_fish():
-    time.sleep(2)
-    while True:
-        print(1)
-        global INVENTORY_ACTION
-        INVENTORY_ACTION = True
-        inventory.put_in_car()
-        INVENTORY_ACTION = False
-        time.sleep(4)
 
-
-def main_stripe():
-    win32gui.EnumWindows(callback, None)
-    fish_bbox = get_fish_strip_bbox(window_size, window_location)
-    green = np.array([60, 150, 60])
-
-    while True:
-        if not INVENTORY_ACTION:
-            printscreen_pil_stripe = ImageGrab.grab(bbox=fish_bbox)
-            image_stripe = np.array(printscreen_pil_stripe)
-            color_stripe = image_stripe[5, 17]
-            if np.array_equal(color_stripe, green):
-
-                inventory.pressEnter()
-                time.sleep(1)
-                inventory.pressComma()
-
-
-
-def main():
-    threading.Thread(target=main_stripe).start()
-    threading.Thread(target=drop_fish).start()
 
 
 if __name__ == '__main__':
-    main()
-    # time.sleep(2)
-    # inventory.put_in_car()
+    fish = Fisher()
+    fish.main()

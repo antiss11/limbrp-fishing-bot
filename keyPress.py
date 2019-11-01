@@ -17,7 +17,8 @@ TAB = 0x0F
 RETURN = 0x1C
 COMMA = 0x33
 GRAVE = 0x29
-BACKSPACE = 0x2B
+BACKSPACE = 0x0E
+UP = 0xC8
 
 # C struct redefinitions
 
