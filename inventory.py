@@ -35,27 +35,27 @@ class Inventory:
 
     def take_from_car(self):
         pressGrave()
-        time.sleep(0.2)
+        time.sleep(0.3)
         pressUp()
-        time.sleep(0.2)
+        time.sleep(0.3)
         pressEnter()
-        time.sleep(0.2)
+        time.sleep(0.3)
         pressEnter()
-        time.sleep(0.2)
+        time.sleep(0.3)
         pressEnter()
-        time.sleep(0.2)
+        time.sleep(0.3)
         pressDown()
-        time.sleep(0.2)
+        time.sleep(0.3)
         pressEnter()
-        time.sleep(0.2)
-        pressFour()
-        time.sleep(0.2)
+        time.sleep(0.3)
+        pressEight()
+        time.sleep(0.3)
         pressTab()
-        time.sleep(0.2)
+        time.sleep(0.3)
         pressBackspace()
-        time.sleep(0.2)
+        time.sleep(0.3)
         pressBackspace()
-        time.sleep(0.2)
+        time.sleep(0.3)
         pressBackspace()
 
 
@@ -106,6 +106,11 @@ def pressFour():
     time.sleep(0.05)
     keyPress.ReleaseKey(keyPress.FOUR)
 
+def pressEight():
+    keyPress.PressKey(keyPress.EIGHT)
+    time.sleep(0.05)
+    keyPress.ReleaseKey(keyPress.EIGHT)
+
 def pressGrave():
     keyPress.PressKey(keyPress.GRAVE)
     time.sleep(0.05)
@@ -118,4 +123,3 @@ def pressDown():
 def pressUp():
     keyboard.press_and_release(hotkb_pro_up)
     time.sleep(0.05)
-

@@ -9,6 +9,14 @@ window_location = []
 window_size = []
 
 
+def breaking_car():
+    time.sleep(4)
+    while True:
+        inventory.pressEnter()
+        time.sleep(7)
+
+
+
 class Fisher:
     def __init__(self):
         self.inventory = inventory.Inventory()
@@ -37,10 +45,18 @@ class Fisher:
                 time.sleep(0.2)
 
     def main(self):
-        # self.drop_fish()
-        threading.Thread(target=self.drop_fish).start()
-        threading.Thread(target=self.main_stripe).start()
+        task_type = input("1 - ловим, 2 - продаем, 3 - взламываем: ")
 
+        if task_type == "1":
+            threading.Thread(target=self.drop_fish).start()
+            threading.Thread(target=self.main_stripe).start()
+        elif task_type == "2":
+            time.sleep(3)
+            while True:
+                self.inventory.take_from_car()
+                time.sleep(2)
+        elif task_type == "3":
+            breaking_car()
 
 
 def get_fish_strip_bbox(window_size, window_location):

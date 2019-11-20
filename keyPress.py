@@ -19,6 +19,7 @@ COMMA = 0x33
 GRAVE = 0x29
 BACKSPACE = 0x0E
 UP = 0xC8
+EIGHT = 0x09
 
 # C struct redefinitions
 
